@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
         calculateButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // Perform action on click
+                // Performs calculation
                 String tmp = "";
                 Double a, b;
                 tmp += in.getText().toString();
