@@ -1,5 +1,6 @@
 package com.example.coledeman.homebrew.objects;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -8,45 +9,76 @@ import java.util.Date;
 
 public class Brew {
 
-    Date d;
-    Double i;
-    Double f;
+    long id;
+    Date date;
+    Double initialGravity;
+    Double finalGravity;
     String name;
+    String description;
+
+    ArrayList<GravityMeasurement> gravityMeasurements;
+    ArrayList<BrewIngredient> ingredients;
+
+
 
     public Brew(String name){
-        d = new Date();
+        date = new Date();
     }
 
-    public void setD(Date d) {
-        this.d = d;
+    public void setDate(Date date) {
+        this.date = date;
     }
 
-    public void setI(Double i) {
-        this.i = i;
+    public void setInitialGravity(Double initialGravity) {
+        this.initialGravity = initialGravity;
     }
 
-    public void setF(Double f) {
-        this.f = f;
+    public void setFinalGravity(Double finalGravity) {
+        this.finalGravity = finalGravity;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public Date getD() {
+    public Date getDate() {
 
-        return d;
+        return date;
     }
 
-    public Double getI() {
-        return i;
+    public Double getInitialGravity() {
+        return initialGravity;
     }
 
-    public Double getF() {
-        return f;
+    public Double getFinalGravity() {
+        return finalGravity;
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public ArrayList<GravityMeasurement> getGravityMeasurements() {
+        return gravityMeasurements;
+    }
+
+    public ArrayList<BrewIngredient> getIngredients() {
+        return ingredients;
     }
 }
