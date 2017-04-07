@@ -1,4 +1,4 @@
-package com.example.coledeman.homebrew;
+package com.example.coledeman.homebrew.controllers;
 
 /**
  * Created by Cole DeMan on 1/24/2017.

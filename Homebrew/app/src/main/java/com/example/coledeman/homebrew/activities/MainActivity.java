@@ -1,4 +1,4 @@
-package com.example.coledeman.homebrew;
+package com.example.coledeman.homebrew.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,6 +7,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.coledeman.homebrew.controllers.AbvCalcLogic;
+import com.example.coledeman.homebrew.R;
 
 public class MainActivity extends AppCompatActivity {
 
