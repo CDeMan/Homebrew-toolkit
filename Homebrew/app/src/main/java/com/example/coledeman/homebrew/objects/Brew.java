@@ -9,17 +9,37 @@ import java.util.Date;
 
 public class Brew {
 
-    long id;
-    Date date;
-    Double initialGravity;
-    Double finalGravity;
-    String name;
-    String description;
+    private long id;
+    private Date date;
+    private Double initialGravity;
+    private Double finalGravity;
+    private String name;
+    private String description;
 
-    ArrayList<GravityMeasurement> gravityMeasurements;
-    ArrayList<BrewIngredient> ingredients;
+    private ArrayList<GravityMeasurement> gravityMeasurements;
+    private ArrayList<BrewIngredient> ingredients;
 
+    public Brew(long id, Date date, Double initialGravity, Double finalGravity, String name, String description, ArrayList<GravityMeasurement> gravityMeasurements, ArrayList<BrewIngredient> ingredients) {
+        this.id = id;
+        this.date = date;
+        this.initialGravity = initialGravity;
+        this.finalGravity = finalGravity;
+        this.name = name;
+        this.description = description;
+        this.gravityMeasurements = gravityMeasurements;
+        this.ingredients = ingredients;
+    }
 
+    public Brew(Date date, String name, String description) {
+        this.date = date;
+        this.name = name;
+        this.description = description;
+        this.initialGravity = -1.0;
+        this.finalGravity = -1.0;
+
+        this.gravityMeasurements = new ArrayList<GravityMeasurement>();
+        this.ingredients = new ArrayList<BrewIngredient>();
+    }
 
     public Brew(String name){
         date = new Date();
@@ -80,5 +100,17 @@ public class Brew {
 
     public ArrayList<BrewIngredient> getIngredients() {
         return ingredients;
+    }
+
+    @Override
+    public String toString() {
+        return "Brew{" +
+                "description='" + description + '\'' +
+                ", id=" + id +
+                ", date=" + date +
+                ", initialGravity=" + initialGravity +
+                ", finalGravity=" + finalGravity +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

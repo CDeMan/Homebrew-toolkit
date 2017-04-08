@@ -4,4 +4,10 @@
     //menu
     <string name="abv_calc">ABV Calculator</string>
     <string name="my_brews">My Brews</string>
+    <string name="add_brew">Add Brew</string>
+    <string name="brew_name">Brew Name:</string>
+    <string name="brew_name_textedit">Brew Name</string>
+    <string name="description">Description</string>
+    <string name="description_label">Description:</string>
+    <string name="date_completed">Date Finished:</string>
 </resources>

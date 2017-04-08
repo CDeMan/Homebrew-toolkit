@@ -8,13 +8,13 @@ import java.util.Date;
 
 public class GravityMeasurement {
 
-    int id;
-    int brewId;
-    Date date;
-    double gravity;
-    int temp;
+    private long id;
+    private long brewId;
+    private Date date;
+    private double gravity;
+    private int temp;
 
-    public GravityMeasurement(int id, int brewId, Date date, double gravity, int temp) {
+    public GravityMeasurement(long id, long brewId, Date date, double gravity, int temp) {
         this.id = id;
         this.brewId = brewId;
         this.date = date;
@@ -22,7 +22,7 @@ public class GravityMeasurement {
         this.temp = temp;
     }
 
-    public int getBrewId() {
+    public long getBrewId() {
         return brewId;
     }
 
@@ -52,5 +52,17 @@ public class GravityMeasurement {
 
     public void setTemp(int temp) {
         this.temp = temp;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setBrewId(long brewId) {
+        this.brewId = brewId;
     }
 }
