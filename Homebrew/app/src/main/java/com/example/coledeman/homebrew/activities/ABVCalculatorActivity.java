@@ -11,7 +11,7 @@ import android.widget.Toast;
 import com.example.coledeman.homebrew.controllers.AbvCalcLogic;
 import com.example.coledeman.homebrew.R;
 
-public class MainActivity extends AppCompatActivity {
+public class ABVCalculatorActivity extends AppCompatActivity {
 
     Button calculateButton;
     TextView result_view;
