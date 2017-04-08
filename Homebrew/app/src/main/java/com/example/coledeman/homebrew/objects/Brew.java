@@ -30,6 +30,17 @@ public class Brew {
         this.ingredients = ingredients;
     }
 
+    public Brew(Date date, String name, String description) {
+        this.date = date;
+        this.name = name;
+        this.description = description;
+        this.initialGravity = -1.0;
+        this.finalGravity = -1.0;
+
+        this.gravityMeasurements = new ArrayList<GravityMeasurement>();
+        this.ingredients = new ArrayList<BrewIngredient>();
+    }
+
     public Brew(String name){
         date = new Date();
     }

@@ -18,7 +18,6 @@ public class MainMenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
         abvCalculatorButtonSetup();
         myBrewsButtonSetup();
-        addBrewsButtonSetup();
     }
 
     @Override
@@ -26,7 +25,6 @@ public class MainMenuActivity extends AppCompatActivity {
         super.onResume();
         abvCalculatorButtonSetup();
         myBrewsButtonSetup();
-        addBrewsButtonSetup();
         Log.i("BACK BUTTON PRESS", "ON RESUME WAS CALLED ");
     }
 
@@ -56,18 +54,6 @@ public class MainMenuActivity extends AppCompatActivity {
         });
     }
 
-    public void addBrewsButtonSetup() {
-        Button addbrew = (Button) findViewById(R.id.add_brew_button);
-        addbrew.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //redirect to calculator
-                /*Intent intent = new Intent(MainMenuActivity.this, BrewListActivity.class);
-                startActivity(intent);*/
-            }
-
-        });
-    }
 }
 
 

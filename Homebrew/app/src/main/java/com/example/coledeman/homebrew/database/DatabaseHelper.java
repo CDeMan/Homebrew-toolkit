@@ -11,7 +11,9 @@ import com.example.coledeman.homebrew.objects.BrewIngredient;
 import com.example.coledeman.homebrew.objects.Enums.Unit;
 import com.example.coledeman.homebrew.objects.GravityMeasurement;
 
-import java.sql.Date;
+import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
@@ -19,7 +21,7 @@ import java.util.ArrayList;
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 3;
     private static final String DATABASE_NAME = "home_brew";
 
     private static final String KEY_ID = "id";
@@ -46,6 +48,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String GRAVITY_MEASUREMENT_TEMP = "temp";
 
     private static DatabaseHelper sInstance;
+    private static SimpleDateFormat sdf;
 
     //table creation methods
     private void createBrewTable(SQLiteDatabase db) {
@@ -66,6 +69,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + BREW_INGREDIENT_TABLE + "("
                 + KEY_ID + " INTEGER PRIMARY KEY,"
                 + BREW_ID + " REFERENCES " + BREW_TABLE + "(" + KEY_ID + ") ON DELETE CASCADE,"
+                + BREW_INGREDIENT_NAME + " TEXT,"
                 + BREW_INGREDIENT_UNIT + " INTEGER,"
                 + BREW_INGREDIENT_QUANTITY + " TEXT"
                 + ")";
@@ -92,6 +96,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (sInstance == null) {
             sInstance = new DatabaseHelper(context.getApplicationContext());
         }
+        sdf = new SimpleDateFormat("yyyy-MM-dd");
         return sInstance;
     }
 
@@ -134,7 +139,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(BREW_NAME, brew.getName());
-        values.put(BREW_DATE, brew.getDate().toString());
+        values.put(BREW_DATE, sdf.format(brew.getDate()));
         values.put(BREW_INTIAL_GRAVITY, brew.getInitialGravity());
         values.put(BREW_FINAL_GRAVITY, brew.getFinalGravity());
         values.put(BREW_NAME, brew.getName());
@@ -161,7 +166,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
-            gravities.add(new Brew(cursor.getLong(0), Date.valueOf(cursor.getString(1)), cursor.getDouble(2),
+            Date d = null;
+            try {
+                d = sdf.parse(cursor.getString(1));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            gravities.add(new Brew(cursor.getLong(0), d, cursor.getDouble(2),
                     cursor.getDouble(3), cursor.getString(4), cursor.getString(5),
                     getAllGravityMeasurementsByBrewId(cursor.getLong(0)), getAllBrewIngredients(cursor.getLong(0))));
             cursor.moveToNext();
@@ -190,7 +201,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Brew brew = null;
         if (cursor.moveToFirst()) {
-            brew = new Brew(cursor.getLong(0), Date.valueOf(cursor.getString(1)), cursor.getDouble(2),
+            Date d = null;
+            try {
+                d = sdf.parse(cursor.getString(1));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            brew = new Brew(cursor.getLong(0), d, cursor.getDouble(2),
                     cursor.getDouble(3), cursor.getString(4), cursor.getString(5),
                     getAllGravityMeasurementsByBrewId(cursor.getLong(0)), getAllBrewIngredients(cursor.getLong(0)));
         }
@@ -213,7 +230,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(BREW_ID, gravity.getBrewId());
-        values.put(GRAVITY_MEASUREMENT_DATE, gravity.getDate().toString());
+        values.put(GRAVITY_MEASUREMENT_DATE, sdf.format(gravity.getDate()));
         values.put(GRAVITY_MEASUREMENT_TEMP, gravity.getTemp());
         values.put(GRAVITY_MEASUREMENT_GRAVITY, gravity.getGravity());
 
@@ -243,7 +260,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         );
         GravityMeasurement gravity = null;
         if (cursor.moveToFirst()) {
-            gravity = new GravityMeasurement(cursor.getLong(0), cursor.getLong(1), Date.valueOf(cursor.getString(2)),
+            Date d = null;
+            try {
+                d = sdf.parse(cursor.getString(2));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            gravity = new GravityMeasurement(cursor.getLong(0), cursor.getLong(1), d,
                     cursor.getDouble(3), cursor.getInt(4));
         }
         cursor.close();
@@ -258,12 +281,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[]{
                         KEY_ID, BREW_ID, GRAVITY_MEASUREMENT_DATE, GRAVITY_MEASUREMENT_GRAVITY,
                         GRAVITY_MEASUREMENT_TEMP
-                }, BREW_ID + "=?", new String[]{String.valueOf(id)}, null, null, BREW_NAME);
+                }, BREW_ID + "=?", new String[]{String.valueOf(id)}, null, null, KEY_ID);
 
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
-            gravities.add(new GravityMeasurement(cursor.getLong(0), cursor.getLong(1), Date.valueOf(cursor.getString(2)),
+
+            Date d = null;
+            try {
+                d = sdf.parse(cursor.getString(2));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            gravities.add(new GravityMeasurement(cursor.getLong(0), cursor.getLong(1), d,
                     cursor.getDouble(3), cursor.getInt(4)));
             cursor.moveToNext();
         }
@@ -329,7 +359,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ArrayList<BrewIngredient> ingredients = new ArrayList<BrewIngredient>();
         Cursor cursor = db.query(BREW_INGREDIENT_TABLE,
                 new String[]{
-                        KEY_ID, BREW_ID, BREW_NAME, BREW_INGREDIENT_NAME, BREW_INGREDIENT_UNIT,
+                        KEY_ID, BREW_ID, BREW_INGREDIENT_NAME, BREW_INGREDIENT_UNIT,
                         BREW_INGREDIENT_QUANTITY
                 }, BREW_ID + "=?", new String[]{String.valueOf(id)}, null, null, BREW_NAME);
 
