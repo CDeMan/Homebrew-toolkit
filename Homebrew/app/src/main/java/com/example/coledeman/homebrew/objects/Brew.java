@@ -16,10 +16,19 @@ public class Brew {
     String name;
     String description;
 
-    ArrayList<GravityMeasurement> gravityMeasurements;
-    ArrayList<BrewIngredient> ingredients;
+    private ArrayList<GravityMeasurement> gravityMeasurements;
+    private ArrayList<BrewIngredient> ingredients;
 
-
+    public Brew(long id, Date date, Double initialGravity, Double finalGravity, String name, String description, ArrayList<GravityMeasurement> gravityMeasurements, ArrayList<BrewIngredient> ingredients) {
+        this.id = id;
+        this.date = date;
+        this.initialGravity = initialGravity;
+        this.finalGravity = finalGravity;
+        this.name = name;
+        this.description = description;
+        this.gravityMeasurements = gravityMeasurements;
+        this.ingredients = ingredients;
+    }
 
     public Brew(String name){
         date = new Date();

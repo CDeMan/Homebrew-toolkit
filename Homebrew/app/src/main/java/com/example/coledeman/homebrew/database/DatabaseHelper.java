@@ -1,8 +1,18 @@
 package com.example.coledeman.homebrew.database;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.example.coledeman.homebrew.objects.Brew;
+import com.example.coledeman.homebrew.objects.BrewIngredient;
+import com.example.coledeman.homebrew.objects.Enums.Unit;
+import com.example.coledeman.homebrew.objects.GravityMeasurement;
+
+import java.sql.Date;
+import java.util.ArrayList;
 
 /**
  * Created by Cole DeMan on 4/8/2017.
@@ -118,4 +128,183 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.setForeignKeyConstraintsEnabled(true);
 
     }
+
+    public Brew addBrew(Brew brew) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(BREW_NAME, brew.getName());
+        values.put(BREW_DATE, brew.getDate().toString());
+        values.put(BREW_INTIAL_GRAVITY, brew.getInitialGravity());
+        values.put(BREW_FINAL_GRAVITY, brew.getFinalGravity());
+        values.put(BREW_NAME, brew.getName());
+        values.put(BREW_DESCRIPTION, brew.getDescription());
+
+        long id = db.insert(BREW_TABLE, null, values);
+
+        //// TODO: 4/8/2017 use get brew by id to get the added brew to return, incase something is updated. 
+        brew.setId(id);
+        db.close();
+
+        return brew;
+    }
+
+    public Brew getBrewById(long id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(
+                BREW_TABLE,
+                new String[]{
+                        KEY_ID, BREW_DATE, BREW_INTIAL_GRAVITY, BREW_FINAL_GRAVITY,
+                        BREW_NAME, BREW_DESCRIPTION
+                },
+                KEY_ID + "=?",
+                new String[]{
+                        String.valueOf(id)
+                },
+                null, null, null
+        );
+
+        Brew brew = null;
+        if (cursor.moveToFirst()) {
+            brew = new Brew(cursor.getLong(0), Date.valueOf(cursor.getString(1)), cursor.getDouble(2),
+                    cursor.getDouble(3), cursor.getString(4), cursor.getString(5),
+                    getAllGravityMeasurementsByBrewId(cursor.getLong(0)), getAllBrewIngredients(cursor.getLong(0)));
+        }
+
+        cursor.close();
+        db.close();
+        return null;
+    }
+
+    public GravityMeasurement addGravityMeasurement(GravityMeasurement gravity) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(BREW_ID, gravity.getBrewId());
+        values.put(GRAVITY_MEASUREMENT_DATE, gravity.getDate().toString());
+        values.put(GRAVITY_MEASUREMENT_TEMP, gravity.getTemp());
+        values.put(GRAVITY_MEASUREMENT_GRAVITY, gravity.getGravity());
+
+        long id = db.insert(GRAVITY_MEASUREMENT_TABLE, null, values);
+
+        //// TODO: 4/8/2017 use get brew by id to get the added brew to return, incase something is updated.
+        gravity.setId(id);
+        db.close();
+
+        return gravity;
+    }
+
+    public GravityMeasurement getGravityMeasurementById(long id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(
+                GRAVITY_MEASUREMENT_TABLE,
+                new String[]{
+                        KEY_ID, BREW_ID, GRAVITY_MEASUREMENT_DATE, GRAVITY_MEASUREMENT_GRAVITY,
+                        GRAVITY_MEASUREMENT_TEMP
+                },
+                KEY_ID + "=?",
+                new String[]{
+                        String.valueOf(id)
+                },
+                null, null, null
+        );
+        GravityMeasurement gravity = null;
+        if (cursor.moveToFirst()) {
+            gravity = new GravityMeasurement(cursor.getLong(0), cursor.getLong(1), Date.valueOf(cursor.getString(2)),
+                    cursor.getDouble(3), cursor.getInt(4));
+        }
+        cursor.close();
+        db.close();
+        return gravity;
+    }
+
+    public ArrayList<GravityMeasurement> getAllGravityMeasurementsByBrewId(long id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<GravityMeasurement> gravities = new ArrayList<GravityMeasurement>();
+        Cursor cursor = db.query(GRAVITY_MEASUREMENT_TABLE,
+                new String[]{
+                        KEY_ID, BREW_ID, GRAVITY_MEASUREMENT_DATE, GRAVITY_MEASUREMENT_GRAVITY,
+                        GRAVITY_MEASUREMENT_TEMP
+                }, BREW_ID + "=?", new String[]{String.valueOf(id)}, null, null, BREW_NAME);
+
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            gravities.add(new GravityMeasurement(cursor.getLong(0), cursor.getLong(1), Date.valueOf(cursor.getString(2)),
+                    cursor.getDouble(3), cursor.getInt(4)));
+            cursor.moveToNext();
+        }
+        cursor.close();
+        db.close();
+
+        return gravities;
+    }
+
+    public BrewIngredient addBrewIngredient(BrewIngredient ing) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(BREW_INGREDIENT_NAME, ing.getName());
+        values.put(BREW_INGREDIENT_QUANTITY, ing.getQuantity());
+        values.put(BREW_INGREDIENT_UNIT, ing.getUnit().getId());
+        values.put(BREW_ID, ing.getBrewID());
+
+        long id = db.insert(BREW_INGREDIENT_TABLE, null, values);
+
+        //// TODO: 4/8/2017 use get brew by id to get the added brew to return, incase something is updated.
+        ing.setId(id);
+        db.close();
+
+        return ing;
+    }
+
+    public BrewIngredient getBrewIngredientById(long id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(
+                BREW_INGREDIENT_TABLE,
+                new String[]{
+                        KEY_ID, BREW_ID, BREW_NAME, BREW_INGREDIENT_NAME, BREW_INGREDIENT_UNIT,
+                        BREW_INGREDIENT_QUANTITY
+                },
+                KEY_ID + "=?",
+                new String[]{
+                        String.valueOf(id)
+                },
+                null, null, null
+        );
+        BrewIngredient ing = null;
+        if (cursor.moveToFirst()) {
+            ing = new BrewIngredient(cursor.getLong(0), cursor.getLong(1), cursor.getString(2),
+                    Unit.getUnitByInt(cursor.getInt(3)), cursor.getInt(4));
+        }
+        cursor.close();
+        db.close();
+        return ing;
+    }
+
+    public ArrayList<BrewIngredient> getAllBrewIngredients(long id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<BrewIngredient> ingredients = new ArrayList<BrewIngredient>();
+        Cursor cursor = db.query(BREW_INGREDIENT_TABLE,
+                new String[]{
+                        KEY_ID, BREW_ID, BREW_NAME, BREW_INGREDIENT_NAME, BREW_INGREDIENT_UNIT,
+                        BREW_INGREDIENT_QUANTITY
+                }, BREW_ID + "=?", new String[]{String.valueOf(id)}, null, null, BREW_NAME);
+
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            ingredients.add(new BrewIngredient(cursor.getLong(0), cursor.getLong(1), cursor.getString(2),
+                    Unit.getUnitByInt(cursor.getInt(3)), cursor.getInt(4)));
+            cursor.moveToNext();
+        }
+        cursor.close();
+        db.close();
+
+        return ingredients;
+    }
+
 }

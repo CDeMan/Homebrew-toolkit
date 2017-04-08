@@ -8,13 +8,13 @@ import com.example.coledeman.homebrew.objects.Enums.Unit;
 
 public class BrewIngredient {
 
-    int id;
-    int brewID;
+    long id;
+    long brewID;
     String name;
     Unit unit;
     int quantity;
 
-    public BrewIngredient(int id, int brewID, String name, Unit unit, int quantity) {
+    public BrewIngredient(long id, long brewID, String name, Unit unit, int quantity) {
         this.id = id;
         this.brewID = brewID;
         this.name = name;
@@ -29,15 +29,15 @@ public class BrewIngredient {
         this.quantity = quantity;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public int getBrewID() {
+    public long getBrewID() {
         return brewID;
     }
 
