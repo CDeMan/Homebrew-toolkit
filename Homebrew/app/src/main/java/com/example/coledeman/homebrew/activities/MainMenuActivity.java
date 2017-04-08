@@ -1,0 +1,34 @@
+package com.example.coledeman.homebrew.activities;
+
+import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.TableRow;
+
+import com.example.coledeman.homebrew.R;
+
+public class MainMenuActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main_menu);
+        abvCalculatorButtonSetup();
+    }
+
+    public void abvCalculatorButtonSetup() {
+        TableRow abvCalc = (TableRow) findViewById(R.id.abvCalcRow);
+        abvCalc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //redirect to calculator
+                Intent intent = new Intent(MainMenuActivity.this, ABVCalculatorActivity.class);
+                startActivity(intent);
+            }
+
+        });
+    }
+}
+
+

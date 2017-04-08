@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Homebrew</string>
+
+    //menu
+    <string name="abv_calc">ABV Calculator</string>
+    <string name="my_brews">My Brews</string>
 </resources>
