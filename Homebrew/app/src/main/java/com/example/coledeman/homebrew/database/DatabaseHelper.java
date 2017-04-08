@@ -24,6 +24,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //brew ingredients
     private static final String BREW_INGREDIENT_NAME = "name";
+    private static final String BREW_ID = "brew_id";
     private static final String BREW_INGREDIENT_TABLE = "brew_ingredients";
     private static final String BREW_INGREDIENT_UNIT = "unit";
     private static final String BREW_INGREDIENT_QUANTITY = "quantity";
@@ -54,11 +55,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String CREATE_BREW_INGREDIENT_DATABASE = "CREATE TABLE "
                 + BREW_INGREDIENT_TABLE + "("
                 + KEY_ID + " INTEGER PRIMARY KEY,"
+                + BREW_ID + " REFERENCES " + BREW_TABLE + "(" + KEY_ID + ") ON DELETE CASCADE,"
                 + BREW_INGREDIENT_UNIT + " INTEGER,"
-                + BREW_INGREDIENT_QUANTITY + " TEXT,"
-                + BREW_DATE + " DATE,"
-                + BREW_INTIAL_GRAVITY + " REAL,"
-                + BREW_FINAL_GRAVITY + " REAL"
+                + BREW_INGREDIENT_QUANTITY + " TEXT"
+                + ")";
+        db.execSQL(CREATE_BREW_INGREDIENT_DATABASE);
+    }
+
+    private void createGravityTable(SQLiteDatabase db) {
+        String CREATE_BREW_INGREDIENT_DATABASE = "CREATE TABLE "
+                + GRAVITY_MEASUREMENT_TABLE + "("
+                + KEY_ID + " INTEGER PRIMARY KEY,"
+                + BREW_ID + " REFERENCES " + BREW_TABLE + "(" + KEY_ID + ") ON DELETE CASCADE,"
+                + GRAVITY_MEASUREMENT_DATE + " DATE,"
+                + GRAVITY_MEASUREMENT_GRAVITY + " REAL,"
+                + GRAVITY_MEASUREMENT_TEMP + " REAL"
                 + ")";
         db.execSQL(CREATE_BREW_INGREDIENT_DATABASE);
     }
@@ -81,6 +92,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         createBrewTable(db);
+        createBrewIngedientTable(db);
+        createGravityTable(db);
     }
 
     @Override
@@ -94,7 +107,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        db.execSQL("DROP TABLE IF EXISTS " + BREW_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + BREW_INGREDIENT_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + GRAVITY_MEASUREMENT_TABLE);
+        onCreate(db);
     }
 
     @Override
