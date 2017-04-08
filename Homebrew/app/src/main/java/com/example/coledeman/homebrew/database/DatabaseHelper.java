@@ -30,7 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String BREW_DATE = "brew_date";
     private static final String BREW_INTIAL_GRAVITY = "intial_gravity";
     private static final String BREW_FINAL_GRAVITY = "final_gravity";
-    private static final String BREW_DESCRIPTION = "final_gravity";
+    private static final String BREW_DESCRIPTION = "description";
 
     //brew ingredients
     private static final String BREW_INGREDIENT_NAME = "name";
@@ -43,7 +43,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String GRAVITY_MEASUREMENT_TABLE = "gravity_measurements";
     private static final String GRAVITY_MEASUREMENT_GRAVITY = "gravity";
     private static final String GRAVITY_MEASUREMENT_DATE = "date";
-    private static final String GRAVITY_MEASUREMENT_TEMP = "gravity";
+    private static final String GRAVITY_MEASUREMENT_TEMP = "temp";
 
     private static DatabaseHelper sInstance;
 
@@ -149,6 +149,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return brew;
     }
 
+    public ArrayList<Brew> getAllBrews() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<Brew> gravities = new ArrayList<Brew>();
+        Cursor cursor = db.query(BREW_TABLE,
+                new String[]{
+                        KEY_ID, BREW_DATE, BREW_INTIAL_GRAVITY, BREW_FINAL_GRAVITY,
+                        BREW_NAME, BREW_DESCRIPTION
+                }, null, null, null, null, BREW_NAME);
+
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            gravities.add(new Brew(cursor.getLong(0), Date.valueOf(cursor.getString(1)), cursor.getDouble(2),
+                    cursor.getDouble(3), cursor.getString(4), cursor.getString(5),
+                    getAllGravityMeasurementsByBrewId(cursor.getLong(0)), getAllBrewIngredients(cursor.getLong(0))));
+            cursor.moveToNext();
+        }
+        cursor.close();
+        db.close();
+
+        return gravities;
+    }
+
     public Brew getBrewById(long id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -174,7 +197,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         cursor.close();
         db.close();
-        return null;
+        return brew;
+    }
+
+    public int deleteBrew(long id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int rowsDeleted = 0;
+        rowsDeleted = db.delete(BREW_TABLE, KEY_ID + "=?", new String[]{String.valueOf(id)});
+        db.close();
+        return rowsDeleted;
     }
 
     public GravityMeasurement addGravityMeasurement(GravityMeasurement gravity) {
@@ -242,6 +273,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return gravities;
     }
 
+    public int deleteGravityMeasurement(long id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int rowsDeleted = 0;
+        rowsDeleted = db.delete(GRAVITY_MEASUREMENT_TABLE, KEY_ID + "=?", new String[]{String.valueOf(id)});
+        db.close();
+        return rowsDeleted;
+    }
+
     public BrewIngredient addBrewIngredient(BrewIngredient ing) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -305,6 +344,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
 
         return ingredients;
+    }
+
+    public int deleteBrewIngredient(long id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int rowsDeleted = 0;
+        rowsDeleted = db.delete(BREW_INGREDIENT_TABLE, KEY_ID + "=?", new String[]{String.valueOf(id)});
+        db.close();
+        return rowsDeleted;
     }
 
 }

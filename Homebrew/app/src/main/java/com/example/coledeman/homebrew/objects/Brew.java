@@ -9,12 +9,12 @@ import java.util.Date;
 
 public class Brew {
 
-    long id;
-    Date date;
-    Double initialGravity;
-    Double finalGravity;
-    String name;
-    String description;
+    private long id;
+    private Date date;
+    private Double initialGravity;
+    private Double finalGravity;
+    private String name;
+    private String description;
 
     private ArrayList<GravityMeasurement> gravityMeasurements;
     private ArrayList<BrewIngredient> ingredients;
@@ -89,5 +89,17 @@ public class Brew {
 
     public ArrayList<BrewIngredient> getIngredients() {
         return ingredients;
+    }
+
+    @Override
+    public String toString() {
+        return "Brew{" +
+                "description='" + description + '\'' +
+                ", id=" + id +
+                ", date=" + date +
+                ", initialGravity=" + initialGravity +
+                ", finalGravity=" + finalGravity +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

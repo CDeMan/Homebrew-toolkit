@@ -8,11 +8,11 @@ import com.example.coledeman.homebrew.objects.Enums.Unit;
 
 public class BrewIngredient {
 
-    long id;
-    long brewID;
-    String name;
-    Unit unit;
-    int quantity;
+    private long id;
+    private long brewID;
+    private String name;
+    private Unit unit;
+    private int quantity;
 
     public BrewIngredient(long id, long brewID, String name, Unit unit, int quantity) {
         this.id = id;

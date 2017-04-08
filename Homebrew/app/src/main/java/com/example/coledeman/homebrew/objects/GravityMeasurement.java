@@ -8,11 +8,11 @@ import java.util.Date;
 
 public class GravityMeasurement {
 
-    long id;
-    long brewId;
-    Date date;
-    double gravity;
-    int temp;
+    private long id;
+    private long brewId;
+    private Date date;
+    private double gravity;
+    private int temp;
 
     public GravityMeasurement(long id, long brewId, Date date, double gravity, int temp) {
         this.id = id;

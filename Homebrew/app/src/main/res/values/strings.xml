@@ -4,4 +4,5 @@
     //menu
     <string name="abv_calc">ABV Calculator</string>
     <string name="my_brews">My Brews</string>
+    <string name="add_brew">Add Brew</string>
 </resources>
